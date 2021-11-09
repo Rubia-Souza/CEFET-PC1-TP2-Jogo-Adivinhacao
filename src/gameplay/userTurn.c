@@ -5,7 +5,7 @@
 #include "utils/constants.h"
 #include "userTurn.h"
 
-void startUserTurn(int ganeratedNumber) {
+int startUserTurn(const int ganeratedNumber) {
     printf("Qual o número secreto gerado pelo computador?\n");
 
     int userGuess = 0, attempts = 0;
@@ -18,8 +18,7 @@ void startUserTurn(int ganeratedNumber) {
         attempts++;
     } while (!userGuessedRight);
 
-    printf("\nParabéns, você acertou em %d tentativas.", attempts);
-    return;
+    return attempts;
 }
 
 int getUserGuess() {
@@ -38,7 +37,7 @@ int getUserGuess() {
     return userGuess;
 }
 
-bool verifyUserGuess(int guessValue, int generatedNumber) {
+bool verifyUserGuess(const int guessValue, const int generatedNumber) {
     if (guessValue == generatedNumber) {
         return true;
     }

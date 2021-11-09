@@ -1,1 +1,1 @@
-void startUserTurn(int ganeratedNumber);
+int startUserTurn(const int ganeratedNumber);
