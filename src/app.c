@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <locale.h>
+#include <time.h>
 
 #include "utils/utils.h"
 #include "utils/constants.h"
@@ -40,6 +41,7 @@ int main() {
 
 void setUpConfigs() {
     setlocale(LC_ALL, DEFAULT_LOCALE);
+    srand(time(0));
 
     return;
 }
