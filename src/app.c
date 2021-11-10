@@ -9,6 +9,12 @@
 #include "gameplay/userTurn.h"
 #include "gameplay/iaTurn.h"
 
+void setUpConfigs();
+int getAmountOfTurns();
+char evaluateResults(const int iaAttempts, const int userAttempts, const int actualTurn, const int maxTurns);
+void printScore(const int iaScore, const int userScore);
+void evaluateFinalResult(const int iaScore, const int userScore);
+
 int main() {
     setUpConfigs();
 

@@ -5,6 +5,9 @@
 #include "utils/constants.h"
 #include "userTurn.h"
 
+int getUserGuess();
+bool verifyUserGuess(const int guessValue, const int generatedNumber);
+
 int startUserTurn(const int ganeratedNumber) {
     printf("Qual o número secreto gerado pelo computador?\n");
 

@@ -5,6 +5,9 @@
 #include "utils/constants.h"
 #include "utils/utils.h"
 
+bool validateGuess(const int guessNumber);
+int guessOtherValueBasedOnLast(const int lastValue);
+
 int startIaTurn() {
     bool isGuessRight = false;
     int attempts = 0;
