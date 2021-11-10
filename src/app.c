@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <locale.h>
 #include <time.h>
+#include <string.h>
 
 #include "utils/utils.h"
 #include "utils/constants.h"
@@ -12,6 +13,7 @@
 void setUpConfigs();
 int getAmountOfTurns();
 char evaluateResults(const int iaAttempts, const int userAttempts, const int actualTurn, const int maxTurns);
+void printUserScore(const int userScore);
 void printScore(const int iaScore, const int userScore);
 void evaluateFinalResult(const int iaScore, const int userScore);
 
@@ -27,13 +29,15 @@ int main() {
 
         generatedNumber =  createRandomNumber(MIN_ACCEPTED_NUMBER, MAX_ACCEPTED_NUMBER);
         userAttempts = startUserTurn(generatedNumber);
+        printUserScore(userAttempts);
+
         iaAttempts = startIaTurn();
 
         char winner = evaluateResults(iaAttempts, userAttempts, i, amountTurns);
         if (winner == USER) {
             userScore++;
         }
-        else {
+        else if (winner == IA) {
             iaScore++;
         }
 
@@ -54,17 +58,19 @@ void setUpConfigs() {
 
 int getAmountOfTurns() {
     int qtdTunrs = 0;
-    bool isInputValid = false;
+    bool isInputInvalid = true;
 
-    printf("Digite a quantidade de rodadas desejada: ");
+    printf("\nJogo da Adivinhação -  Rúbia Alice");
+    printf("\nDigite a quantidade de rodadas desejada: ");
+    fflush(stdin);
     do {
         scanf("%d", &qtdTunrs);
 
-        isInputValid = qtdTunrs <= 0;
-        if (!isInputValid) {
+        isInputInvalid = qtdTunrs <= 0;
+        if (isInputInvalid) {
             printf("\nPor favor digite um valor válido que seja maior que 0.\n");
         }
-    } while(!isInputValid);
+    } while(isInputInvalid);
 
     return qtdTunrs;
 }
@@ -74,15 +80,27 @@ char evaluateResults(const int iaAttempts, const int userAttempts, const int act
     bool isDraw = iaAttempts == userAttempts;
     if (isDraw) {
         printf("\nEmpate na rodada número %d de um total de %d.", actualTurn, maxTurns);
-        return;
+        return '\000';
     }
 
     bool playerWon = iaAttempts < userAttempts;
-    char winner[10] = playerWon ? "Usuário" : "Computador";
+    char winner[15];
+    if (playerWon) {
+        strcpy(winner, "Usuário");
+    }
+    else {
+        strcpy(winner, "Computador");
+    }
+
     printf("\n%s venceu a rodada número %d de um total de %d.", winner, actualTurn, maxTurns);
 
     char result = playerWon ? USER : IA;
     return result;
+}
+
+void printUserScore(const int userScore) {
+    printf("\nParabéns, você acertou em %d tentativas.", userScore);
+    return;
 }
 
 void printScore(const int iaScore, const int userScore) {
@@ -95,7 +113,14 @@ void evaluateFinalResult(const int iaScore, const int userScore) {
         printf("\nHouve um empate.");
     }
     else {
-        char winner[10] = iaScore < userScore ? "Usuário" : "Computador";
+        char winner[15];
+        bool playerWon = iaScore < userScore;
+        if (playerWon) {
+            strcpy(winner, "Usuário");
+        }
+        else {
+            strcpy(winner, "Computador");
+        }
         printf("\n%s venceu.", winner);
     }
 

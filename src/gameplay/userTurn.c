@@ -1,20 +1,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 
-#include "utils/constants.h"
+#include "../utils/constants.h"
 #include "userTurn.h"
 
 int getUserGuess();
 bool verifyUserGuess(const int guessValue, const int generatedNumber);
 
 int startUserTurn(const int ganeratedNumber) {
-    printf("Qual o número secreto gerado pelo computador?\n");
+    printf("\nQual o número secreto gerado pelo computador?");
 
     int userGuess = 0, attempts = 0;
     bool userGuessedRight = false;
 
-    printf("Digite um número entre %d e %d: ", MIN_ACCEPTED_NUMBER, MAX_ACCEPTED_NUMBER);
+    printf("\nDigite um número entre %d e %d: ", MIN_ACCEPTED_NUMBER, MAX_ACCEPTED_NUMBER);
+    fflush(stdin);
     do {
         userGuess = getUserGuess();
         userGuessedRight = verifyUserGuess(userGuess, ganeratedNumber);
@@ -27,6 +29,7 @@ int startUserTurn(const int ganeratedNumber) {
 int getUserGuess() {
     int userGuess = 0;
     bool isInputInvalid = false;
+    fflush(stdin);
 
     do {
         scanf("%d", &userGuess);
@@ -45,8 +48,15 @@ bool verifyUserGuess(const int guessValue, const int generatedNumber) {
         return true;
     }
 
-    char tip[5] = guessValue < generatedNumber ? "maior" : "menor";
-    printf("Errou, o número secreto é %s. Tente novamente: ", tip);
+    char tip[10];
+    if (guessValue < generatedNumber) {
+        strcpy(tip, "maior");
+    }
+    else {
+        strcpy(tip, "menor");
+    }
+
+    printf("\nErrou, o número secreto é %s. Tente novamente: ", tip);
 
     return false;
 }

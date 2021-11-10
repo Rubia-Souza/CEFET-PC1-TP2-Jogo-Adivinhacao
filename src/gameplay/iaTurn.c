@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-#include "utils/constants.h"
-#include "utils/utils.h"
+#include "../utils/constants.h"
+#include "../utils/utils.h"
 
 bool validateGuess(const int guessNumber);
 int guessOtherValueBasedOnLast(const int lastValue);
@@ -26,7 +26,9 @@ int startIaTurn() {
 }
 
 bool validateGuess(const int guessNumber) {
-    printf("O número secreto é %d (s/n)? ", guessNumber);
+    printf("\nO número secreto é %d (s/n)? ", guessNumber);
+    fflush(stdin);
+
     bool isInputValid = false;
     char validation;
 
@@ -44,6 +46,8 @@ bool validateGuess(const int guessNumber) {
 
 int guessOtherValueBasedOnLast(const int lastValue) {
     printf("\nO número é maior do que %d (s/n)? ", lastValue);
+    fflush(stdin);
+
     bool isInputValid = false;
     char userAwnser;
 
