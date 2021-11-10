@@ -9,6 +9,8 @@
                 "-g",
                 "${fileDirname}\\utils\\*.h",
                 "${fileDirname}\\utils\\*.c",
+                "${fileDirname}\\gameplay\\*.h",
+                "${fileDirname}\\gameplay\\*.c",
                 "${file}",
                 "-o",
                 "${fileDirname}\\${fileBasenameNoExtension}.exe",
