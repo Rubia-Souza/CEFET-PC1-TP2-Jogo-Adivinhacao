@@ -22,7 +22,7 @@ int startIaTurn() {
     do {
         userIsStealing = guessNumber == -1;
         if (userIsStealing) {
-            printf("\n[IA]: Tu tá de sacanagem com minha cara né?! Joga esse trem direito ¬_¬");
+            printf("\n[IA]: Que?! Isso não é possível. :o\n Você tá robando ¬_¬");
             return -1;
         }
 
@@ -38,7 +38,7 @@ int startIaTurn() {
 }
 
 bool validateGuess(const int guessNumber) {
-    printf("\nO número secreto é %d (s/n)? ", guessNumber);
+    printf("\n[IA]: >:/ Você... penso no número... :D %d! (s/n)? ", guessNumber);
     fflush(stdin);
 
     bool isInputValid = false;
@@ -49,7 +49,7 @@ bool validateGuess(const int guessNumber) {
 
         isInputValid = validation == 's' || validation == 'n';
         if (!isInputValid) {
-            printf("\nPor favor digite [s] para sim ou [n] para não");
+            printf("\n[JUIZ]: Por favor digite [s] para sim ou [n] para não");
         }
     } while (!isInputValid);
 
@@ -57,7 +57,7 @@ bool validateGuess(const int guessNumber) {
 }
 
 int guessOtherValueBasedOnLast(const int lastValue, int availableNumbers[POSSIBLE_NUMBERS_ARRAY_SIZE]) {
-    printf("\nO número é maior do que %d (s/n)? ", lastValue);
+    printf("\n[IA]: :S Hummm... o número é maior do que %d (s/n)? ", lastValue);
     fflush(stdin);
 
     bool isInputValid = false;
@@ -68,7 +68,7 @@ int guessOtherValueBasedOnLast(const int lastValue, int availableNumbers[POSSIBL
 
         isInputValid = userAwnser == 's' || userAwnser == 'n';
         if (!isInputValid) {
-            printf("\nPor favor digite [s] para sim ou [n] para não");
+            printf("\n[JUIZ]: Por favor digite [s] para sim ou [n] para não");
         }
     } while (!isInputValid);
 

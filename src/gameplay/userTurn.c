@@ -10,12 +10,12 @@ int getUserGuess();
 bool verifyUserGuess(const int guessValue, const int generatedNumber);
 
 int startUserTurn(const int ganeratedNumber) {
-    printf("\nQual o número secreto gerado pelo computador?");
+    printf("\n[IA]: Qual o meu número secreto? <_<\n[IA]: >.>");
 
     int userGuess = 0, attempts = 0;
     bool userGuessedRight = false;
 
-    printf("\nDigite um número entre %d e %d: ", MIN_ACCEPTED_NUMBER, MAX_ACCEPTED_NUMBER);
+    printf("\n[JUIZ]: Digite um número entre %d e %d: ", MIN_ACCEPTED_NUMBER, MAX_ACCEPTED_NUMBER);
     fflush(stdin);
     do {
         userGuess = getUserGuess();
@@ -36,7 +36,7 @@ int getUserGuess() {
 
         isInputInvalid = userGuess < 0 || userGuess > 20;
         if (isInputInvalid) {
-            printf("\nPor favor digite um valor válido, que esteja entre %d e %d", MIN_ACCEPTED_NUMBER, MAX_ACCEPTED_NUMBER);
+            printf("\n[JUIZ]: Por favor digite um valor válido, que esteja entre %d e %d", MIN_ACCEPTED_NUMBER, MAX_ACCEPTED_NUMBER);
         }
     } while(isInputInvalid);
 
@@ -56,7 +56,7 @@ bool verifyUserGuess(const int guessValue, const int generatedNumber) {
         strcpy(tip, "menor");
     }
 
-    printf("\nErrou, o número secreto é %s. Tente novamente: ", tip);
+    printf("\n[IA]: >:3 AAAA, Errou! O número secreto é %s. Tente de novo: ", tip);
 
     return false;
 }

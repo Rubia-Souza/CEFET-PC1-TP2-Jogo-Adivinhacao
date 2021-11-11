@@ -32,8 +32,11 @@ int main() {
         userAttempts = startUserTurn(generatedNumber);
         printUserScore(userAttempts);
 
+        askToThinkANumber();
+
         iaAttempts = startIaTurn();
-        if (iaAttempts == -1) {
+        bool userIsStealing = iaAttempts == -1;
+        if (userIsStealing) {
             printf("\n[JUIZ]: Reiniciando turno devido a ação leviana do usuário.");
             iaAttempts = 0;
             userAttempts = 0;
@@ -67,25 +70,44 @@ int getAmountOfTurns() {
     int qtdTunrs = 0;
     bool isInputInvalid = true;
 
-    printf("\nDigite a quantidade de rodadas desejada: ");
+    printf("\n[JUIZ]: Digite a quantidade de rodadas desejada: ");
     fflush(stdin);
     do {
         scanf("%d", &qtdTunrs);
 
         isInputInvalid = qtdTunrs <= 0;
         if (isInputInvalid) {
-            printf("\nPor favor digite um valor válido que seja maior que 0.\n");
+            printf("\n[JUIZ]: Por favor digite um valor válido que seja maior que 0.\n");
         }
     } while(isInputInvalid);
 
     return qtdTunrs;
 }
 
+void askToThinkANumber() {
+    printf("\n[JUIZ]: Pense em um número secreto entre 0 e 20. Pensou (s/n)?");
+    fflush(stdin);
+    
+    char userInput;
+    bool isInputValid;
+
+    do {
+        scanf("%c", &userInput);
+
+        isInputValid = userInput == 's' || userInput == 'n';
+        if (!isInputValid) {
+            printf("\n[JUIZ]: Por favor digite [s] para sim ou [n] para não");
+        }
+    } while (!isInputValid);
+
+    return;
+}
+
 char evaluateResults(const int iaAttempts, const int userAttempts, const int actualTurn, const int maxTurns) {
-    printf("\nComputador acertou em %d tentativas e o jogador em %d", iaAttempts, userAttempts);
-    bool isDraw = iaAttempts == userAttempts || iaAttempts == -1;
+    printf("\n[JUIZ]: Computador acertou em %d tentativas e o jogador em %d", iaAttempts, userAttempts);
+    bool isDraw = iaAttempts == userAttempts;
     if (isDraw) {
-        printf("\nEmpate na rodada número %d de um total de %d.", actualTurn, maxTurns);
+        printf("\n[JUIZ]: Empate na rodada número %d de um total de %d.", actualTurn, maxTurns);
         return '\000';
     }
 
@@ -98,25 +120,25 @@ char evaluateResults(const int iaAttempts, const int userAttempts, const int act
         strcpy(winner, "Computador");
     }
 
-    printf("\n%s venceu a rodada número %d de um total de %d.", winner, actualTurn, maxTurns);
+    printf("\n[JUIZ]: %s venceu a rodada número %d de um total de %d.", winner, actualTurn, maxTurns);
 
     char result = playerWon ? USER : IA;
     return result;
 }
 
 void printUserScore(const int userScore) {
-    printf("\nParabéns, você acertou em %d tentativas.", userScore);
+    printf("\n[IA]: Parabéns, você acertou em %d tentativas. >.<", userScore);
     return;
 }
 
 void printScore(const int iaScore, const int userScore) {
-    printf("\nPlacar das rodadas:\nComputador: %d Usuário: %d", iaScore, userScore);
+    printf("\n[JUIZ]: Placar das rodadas:\nComputador: %d Usuário: %d", iaScore, userScore);
     return;
 }
 
 void evaluateFinalResult(const int iaScore, const int userScore) {
     if (iaScore == userScore) {
-        printf("\nHouve um empate.");
+        printf("\n[JUIZ]: Houve um empate.");
     }
     else {
         char winner[15];
@@ -127,11 +149,11 @@ void evaluateFinalResult(const int iaScore, const int userScore) {
         else {
             strcpy(winner, "Computador");
         }
-        printf("\n%s venceu.", winner);
+        printf("\n[JUIZ]: %s venceu.", winner);
     }
 
-    printf("\nPlacar final: \n Computador %d Usuário: %d", iaScore, userScore);
-    printf("\nHistoricamente o computador já venceu <insert> rodadas e o usuário <insert> rodas.");
+    printf("\n[JUIZ]: Placar final: \n Computador %d Usuário: %d", iaScore, userScore);
+    printf("\n[JUIZ]: Historicamente o computador já venceu <insert> rodadas e o usuário <insert> rodas.");
     printf("\n____________________________________________");
 
     return;

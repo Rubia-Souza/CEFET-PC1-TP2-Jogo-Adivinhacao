@@ -1,6 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-
 #include "arrayUtils.h"
 #include "constants.h"
 
@@ -26,14 +23,12 @@ void cutLeftPartArray(const int referenceArray[], const int cutNumberStart, int 
 
     int i = 0;
     for (i; referenceArray[cutIndex] != NULL_NUMBER; cutIndex++, i++) {
-        printf("Seting in index %d value %d\n", i, referenceArray[cutIndex]);
         outArray[i] = referenceArray[cutIndex];
     }
 
     *outSize = i - 1;
 
     for (i; referenceArray[i] != NULL_NUMBER; i++) {
-        printf("Seting null into i: %d\n", i);
         outArray[i] = NULL_NUMBER;
     }
 
