@@ -12,6 +12,7 @@
 
 void setUpConfigs();
 int getAmountOfTurns();
+void askToThinkANumber();
 char evaluateResults(const int iaAttempts, const int userAttempts, const int actualTurn, const int maxTurns);
 void printUserScore(const int userScore);
 void printScore(const int iaScore, const int userScore);
