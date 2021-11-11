@@ -5,7 +5,7 @@
 #include <time.h>
 #include <string.h>
 
-#include "utils/utils.h"
+#include "utils/mathUtils.h"
 #include "utils/constants.h"
 #include "gameplay/userTurn.h"
 #include "gameplay/iaTurn.h"
@@ -19,6 +19,7 @@ void evaluateFinalResult(const int iaScore, const int userScore);
 
 int main() {
     setUpConfigs();
+    printf("====== Jogo da Adivinhação - Rúbia Alice ======");
 
     int generatedNumber = 0, amountTurns = 0;
     int userScore = 0, iaScore = 0;
@@ -32,6 +33,12 @@ int main() {
         printUserScore(userAttempts);
 
         iaAttempts = startIaTurn();
+        if (iaAttempts == -1) {
+            printf("\n[JUIZ]: Reiniciando turno devido a ação leviana do usuário.");
+            iaAttempts = 0;
+            userAttempts = 0;
+            i--;
+        }
 
         char winner = evaluateResults(iaAttempts, userAttempts, i, amountTurns);
         if (winner == USER) {
@@ -60,7 +67,6 @@ int getAmountOfTurns() {
     int qtdTunrs = 0;
     bool isInputInvalid = true;
 
-    printf("\nJogo da Adivinhação -  Rúbia Alice");
     printf("\nDigite a quantidade de rodadas desejada: ");
     fflush(stdin);
     do {
@@ -77,7 +83,7 @@ int getAmountOfTurns() {
 
 char evaluateResults(const int iaAttempts, const int userAttempts, const int actualTurn, const int maxTurns) {
     printf("\nComputador acertou em %d tentativas e o jogador em %d", iaAttempts, userAttempts);
-    bool isDraw = iaAttempts == userAttempts;
+    bool isDraw = iaAttempts == userAttempts || iaAttempts == -1;
     if (isDraw) {
         printf("\nEmpate na rodada número %d de um total de %d.", actualTurn, maxTurns);
         return '\000';
@@ -104,7 +110,7 @@ void printUserScore(const int userScore) {
 }
 
 void printScore(const int iaScore, const int userScore) {
-    printf("\nPlacar das rodadas:\nComputador:  %d Usuário: %d", iaScore, userScore);
+    printf("\nPlacar das rodadas:\nComputador: %d Usuário: %d", iaScore, userScore);
     return;
 }
 

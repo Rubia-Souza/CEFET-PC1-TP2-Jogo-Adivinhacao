@@ -3,22 +3,34 @@
 #include <stdbool.h>
 
 #include "../utils/constants.h"
-#include "../utils/utils.h"
+#include "../utils/mathUtils.h"
+#include "../utils/arrayUtils.h"
 
 bool validateGuess(const int guessNumber);
-int guessOtherValueBasedOnLast(const int lastValue);
+int guessOtherValueBasedOnLast(const int lastValue, int availableNumbers[POSSIBLE_NUMBERS_ARRAY_SIZE]);
 
 int startIaTurn() {
-    bool isGuessRight = false;
+    bool isGuessRight = false, userIsStealing = false;
     int attempts = 0;
+
+    int availableNumbers[POSSIBLE_NUMBERS_ARRAY_SIZE];
+    fillArrayWithCount(0, POSSIBLE_NUMBERS_ARRAY_SIZE-1, availableNumbers);
+    availableNumbers[POSSIBLE_NUMBERS_ARRAY_SIZE-1] = NULL_NUMBER;
+
     int guessNumber = createRandomNumber(MIN_ACCEPTED_NUMBER, MAX_ACCEPTED_NUMBER);
 
     do {
+        userIsStealing = guessNumber == -1;
+        if (userIsStealing) {
+            printf("\n[IA]: Tu tá de sacanagem com minha cara né?! Joga esse trem direito ¬_¬");
+            return -1;
+        }
+
         isGuessRight = validateGuess(guessNumber);
         attempts++;
 
         if (!isGuessRight) {
-            guessNumber = guessOtherValueBasedOnLast(guessNumber);
+            guessNumber = guessOtherValueBasedOnLast(guessNumber, availableNumbers);
         }
     } while(!isGuessRight);
 
@@ -44,7 +56,7 @@ bool validateGuess(const int guessNumber) {
     return validation == 's';
 }
 
-int guessOtherValueBasedOnLast(const int lastValue) {
+int guessOtherValueBasedOnLast(const int lastValue, int availableNumbers[POSSIBLE_NUMBERS_ARRAY_SIZE]) {
     printf("\nO número é maior do que %d (s/n)? ", lastValue);
     fflush(stdin);
 
@@ -60,14 +72,23 @@ int guessOtherValueBasedOnLast(const int lastValue) {
         }
     } while (!isInputValid);
 
+    int filteredNumbers[POSSIBLE_NUMBERS_ARRAY_SIZE];
+    int filteredNumbersSize = POSSIBLE_NUMBERS_ARRAY_SIZE;
+
     bool isValueBigger = userAwnser == 's';
-    int newGuess = 0;
     if (isValueBigger) {
-        newGuess = createRandomNumber(lastValue, MAX_ACCEPTED_NUMBER);
+        cutLeftPartArray(availableNumbers, lastValue, &filteredNumbersSize, filteredNumbers);
     }
     else {
-        newGuess = createRandomNumber(MIN_ACCEPTED_NUMBER, lastValue);
+        cutRightPartArray(availableNumbers, lastValue, &filteredNumbersSize, filteredNumbers);
     }
 
-    return newGuess;
+    if (filteredNumbers[0] == NULL_NUMBER) {
+        return -1;
+    }
+
+    int randomNumberIndex = createRandomNumber(0, filteredNumbersSize);
+    copyArray(filteredNumbers, POSSIBLE_NUMBERS_ARRAY_SIZE, availableNumbers);
+
+    return availableNumbers[randomNumberIndex];
 }
