@@ -22,7 +22,7 @@ int startIaTurn() {
     do {
         userIsStealing = guessNumber == -1;
         if (userIsStealing) {
-            printf("\n[IA]: Que?! Isso não é possível. :o\n Você tá robando ¬_¬");
+            printf("\n[IA]: Que?! Isso não é possível. :o\n[IA]: Você tá robando ¬_¬");
             return -1;
         }
 
