@@ -72,8 +72,8 @@ int getAmountOfTurns() {
     bool isInputInvalid = true;
 
     printf("\n[JUIZ]: Digite a quantidade de rodadas desejada: ");
-    fflush(stdin);
     do {
+        fflush(stdin);
         scanf("%d", &qtdTunrs);
 
         isInputInvalid = qtdTunrs <= 0;
@@ -86,20 +86,23 @@ int getAmountOfTurns() {
 }
 
 void askToThinkANumber() {
-    printf("\n[JUIZ]: Pense em um número secreto entre 0 e 20. Pensou (s/n)?");
-    fflush(stdin);
+    printf("\n[JUIZ]: Pense em um número secreto entre 0 e 20. Pensou (s/n)? ");
     
     char userInput;
-    bool isInputValid;
+    bool isInputValid = false;
 
     do {
+        fflush(stdin);
         scanf("%c", &userInput);
 
         isInputValid = userInput == 's' || userInput == 'n';
         if (!isInputValid) {
-            printf("\n[JUIZ]: Por favor digite [s] para sim ou [n] para não");
+            printf("\n[JUIZ]: Por favor digite [s] para sim ou [n] para não: ");
         }
-    } while (!isInputValid);
+        else if (userInput == 'n') {
+            printf("\n[JUIZ]: Já pensou (s/n)? ");
+        }
+    } while (userInput != 's');
 
     return;
 }
