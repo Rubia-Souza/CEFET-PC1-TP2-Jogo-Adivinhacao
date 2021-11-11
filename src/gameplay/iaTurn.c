@@ -39,12 +39,12 @@ int startIaTurn() {
 
 bool validateGuess(const int guessNumber) {
     printf("\n[IA]: >:/ Você... penso no número... :D %d! (s/n)? ", guessNumber);
-    fflush(stdin);
 
     bool isInputValid = false;
     char validation;
 
     do {
+        fflush(stdin);
         scanf("%c", &validation);
 
         isInputValid = validation == 's' || validation == 'n';
@@ -58,12 +58,12 @@ bool validateGuess(const int guessNumber) {
 
 int guessOtherValueBasedOnLast(const int lastValue, int availableNumbers[POSSIBLE_NUMBERS_ARRAY_SIZE]) {
     printf("\n[IA]: :S Hummm... o número é maior do que %d (s/n)? ", lastValue);
-    fflush(stdin);
 
     bool isInputValid = false;
     char userAwnser;
 
     do {
+        fflush(stdin);
         scanf("%c", &userAwnser);
 
         isInputValid = userAwnser == 's' || userAwnser == 'n';

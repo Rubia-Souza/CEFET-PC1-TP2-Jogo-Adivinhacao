@@ -16,7 +16,6 @@ int startUserTurn(const int ganeratedNumber) {
     bool userGuessedRight = false;
 
     printf("\n[JUIZ]: Digite um número entre %d e %d: ", MIN_ACCEPTED_NUMBER, MAX_ACCEPTED_NUMBER);
-    fflush(stdin);
     do {
         userGuess = getUserGuess();
         userGuessedRight = verifyUserGuess(userGuess, ganeratedNumber);
@@ -29,9 +28,9 @@ int startUserTurn(const int ganeratedNumber) {
 int getUserGuess() {
     int userGuess = 0;
     bool isInputInvalid = false;
-    fflush(stdin);
 
     do {
+        fflush(stdin);
         scanf("%d", &userGuess);
 
         isInputInvalid = userGuess < 0 || userGuess > 20;
