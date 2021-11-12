@@ -11,12 +11,46 @@
 #include "gameplay/iaTurn.h"
 #include "saveSystem/saveSystem.h"
 
+/*
+ * Aluna: Rúbia Alice Moreira de Souza
+ * Curso: Engenharia da Computação - CEFET-MG
+ */
+
+/*
+ * Configura funções para valores padrões no projeto e
+ * prepara o arquivo de save
+ */
 void setUpConfigs();
+
+/*
+ * Pergunta ao usuário a quantidade de turnos que serão executados
+ */
 int getAmountOfTurns();
+
+/*
+ * Pede ao usuário para que pense em um número, preparando para iniciar
+ * o turno do computador
+ */
 void askToThinkANumber();
+
+/*
+ * Verifica os resutados de um turno considerando a quantidade de tentativas
+ */
 char evaluateResults(const int iaAttempts, const int userAttempts, const int actualTurn, const int maxTurns);
+
+/*
+ * Imprime a pontuação do usuário no fim do turno em que ele adivinha o número do pc
+ */
 void printUserScore(const int userScore);
+
+/*
+ * Imprime a pontuação final de um turno
+ */
 void printScore(const int iaScore, const int userScore);
+
+/*
+ * Avalia o resultado de todos os turnos e define o possível vencedor
+ */
 void evaluateFinalResult(const int iaScore, const int userScore);
 
 int main() {
@@ -31,23 +65,29 @@ int main() {
         printf("\n\n<<<< Iniciando o turno %d >>>>", i);
         int userAttempts = 0, iaAttempts = 0;
 
+        // Inicia o turno em que o usuário deverá adivinhar o número
         printf("\n[JUIZ]: Iniciando vez do usuário");
         generatedNumber =  createRandomNumber(MIN_ACCEPTED_NUMBER, MAX_ACCEPTED_NUMBER);
         userAttempts = startUserTurn(generatedNumber);
         printUserScore(userAttempts);
 
+        // Pede ao usuário para pensar em um número e se preparar para o turno do pc
         askToThinkANumber();
 
+        // Inicia o turno em que o computador deverá adivinhar o número
         printf("\n[JUIZ]: Iniciando vez da IA");
         iaAttempts = startIaTurn();
+
+        // Verifica se o usuário foi inconsistente com as respostas, levando a nenhum resultado possível
         bool userIsStealing = iaAttempts == -1;
         if (userIsStealing) {
             printf("\n[JUIZ]: Reiniciando turno devido a ação leviana do usuário.");
             iaAttempts = 0;
             userAttempts = 0;
-            i--;
+            i--; // Então, o contador de turnos é decrementado para reinicia-lo
         }
 
+        // Avalia os resultados, por meio das tentativas, de um turno
         char winner = evaluateResults(iaAttempts, userAttempts, i, amountTurns);
         if (winner == USER) {
             userScore++;
@@ -65,9 +105,9 @@ int main() {
 }
 
 void setUpConfigs() {
-    setlocale(LC_ALL, DEFAULT_LOCALE);
-    srand(time(0));
-    createSave();
+    setlocale(LC_ALL, DEFAULT_LOCALE); // Configura a linguagem como portugues
+    srand(time(0)); // Faz configuração inicial para criar números aleatórios
+    createSave(); // Cria a pasta e o arquivo para salvar as pontuações se ainda não existirem
 
     return;
 }
@@ -78,11 +118,11 @@ int getAmountOfTurns() {
 
     printf("\n[JUIZ]: Digite a quantidade de rodadas desejada: ");
     do {
-        fflush(stdin);
+        fflush(stdin); // Limpa buffer de entrada para evitar alguma entrada não necessária
         scanf("%d", &qtdTunrs);
 
         isInputInvalid = qtdTunrs <= 0;
-        if (isInputInvalid) {
+        if (isInputInvalid) { // Valida se a quantidade de turnos informada é válida
             printf("\n[JUIZ]: Por favor digite um valor válido que seja maior que 0: ");
         }
     } while(isInputInvalid);
@@ -97,14 +137,14 @@ void askToThinkANumber() {
     bool isInputValid = false;
 
     do {
-        fflush(stdin);
+        fflush(stdin); // Limpa buffer de entrada para evitar alguma entrada não necessária
         scanf("%c", &userInput);
 
         isInputValid = userInput == 's' || userInput == 'n';
-        if (!isInputValid) {
+        if (!isInputValid) { // Avalia se a escolha digitada pelo usuário é válida
             printf("\n[JUIZ]: Por favor digite [s] para sim ou [n] para não: ");
         }
-        else if (userInput == 'n') {
+        else if (userInput == 'n') { // Continua a questionar o usuário até decidir
             printf("\n[JUIZ]: Já pensou (s/n)? ");
         }
     } while (userInput != 's');
@@ -114,12 +154,14 @@ void askToThinkANumber() {
 
 char evaluateResults(const int iaAttempts, const int userAttempts, const int actualTurn, const int maxTurns) {
     printf("\n[JUIZ]: Computador acertou em %d tentativas e o jogador em %d", iaAttempts, userAttempts);
+    // Verifica se houve um empate em um turno
     bool isDraw = iaAttempts == userAttempts;
     if (isDraw) {
         printf("\n[JUIZ]: Empate na rodada número %d de um total de %d.", actualTurn, maxTurns);
         return '\000';
     }
 
+    // Avalia qual foi o vencedor do turno
     bool playerWon = userAttempts < iaAttempts;
     char winner[15];
     if (playerWon) {
@@ -146,10 +188,10 @@ void printScore(const int iaScore, const int userScore) {
 }
 
 void evaluateFinalResult(const int iaScore, const int userScore) {
-    if (iaScore == userScore) {
+    if (iaScore == userScore) { // Verifica se houve um empate no jogo
         printf("\n[JUIZ]: Houve um empate.");
     }
-    else {
+    else { // Se não, verifica qual foi o vencedor
         char winner[15];
         bool playerWon = iaScore < userScore;
         if (playerWon) {
@@ -161,14 +203,20 @@ void evaluateFinalResult(const int iaScore, const int userScore) {
         printf("\n[JUIZ]: %s venceu.", winner);
     }
 
+    // Então, ele carrega as informações do arquivo de texto se houver
+    // Caso não esteja presente as variáveis permanecem 0
     int userHistoryScore = 0, iaHistoryScore = 0;
     loadScore(&userHistoryScore, &iaHistoryScore);
+
+    // Depois elas são incrementadas conforme a pontuação obtida pelo jogador e pelo pc
     userHistoryScore += userScore;
     iaHistoryScore += iaScore;
+
+    // Por fim, as novas potuações são salvas no arquivo save.txt
     saveScore(userHistoryScore, iaHistoryScore);
 
     printf("\n[JUIZ]: Placar final: \n Computador %d | Usuário: %d", iaScore, userScore);
-    printf("\n[JUIZ]: Historicamente o computador já venceu %d rodadas e o usuário %d rodas.", userHistoryScore, iaHistoryScore);
+    printf("\n[JUIZ]: Historicamente o computador já venceu %d rodadas e o usuário %d rodas.", iaHistoryScore, userHistoryScore);
     printf("\n____________________________________________");
 
     return;

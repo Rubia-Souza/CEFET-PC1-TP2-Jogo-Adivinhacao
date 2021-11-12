@@ -6,7 +6,14 @@
 #include "../utils/constants.h"
 #include "userTurn.h"
 
+/*
+ * Pede para o jogador chutar um número
+ */
 int getUserGuess();
+
+/*
+ * Verifica se o chute do jogador está correto
+ */
 bool verifyUserGuess(const int guessValue, const int generatedNumber);
 
 int startUserTurn(const int ganeratedNumber) {
@@ -16,10 +23,11 @@ int startUserTurn(const int ganeratedNumber) {
     bool userGuessedRight = false;
 
     printf("\n[JUIZ]: Digite um número entre %d e %d: ", MIN_ACCEPTED_NUMBER, MAX_ACCEPTED_NUMBER);
+    // Enquanto o jogador não acertar o número, a função permanece no loop
     do {
-        userGuess = getUserGuess();
-        userGuessedRight = verifyUserGuess(userGuess, ganeratedNumber);
-        attempts++;
+        userGuess = getUserGuess(); // Pede um valor para o usuário
+        userGuessedRight = verifyUserGuess(userGuess, ganeratedNumber); // Verifica se está correto
+        attempts++; // Cada valor dado é adicionado como uma tentativa
     } while (!userGuessedRight);
 
     return attempts;
@@ -33,8 +41,8 @@ int getUserGuess() {
         fflush(stdin);
         scanf("%d", &userGuess);
 
-        isInputInvalid = userGuess < 0 || userGuess > 20;
-        if (isInputInvalid) {
+        isInputInvalid = userGuess < MIN_ACCEPTED_NUMBER || userGuess > MAX_ACCEPTED_NUMBER;
+        if (isInputInvalid) {// Verifica se o número informado esta na faixa válida do jogo
             printf("\n[JUIZ]: Por favor digite um valor válido, que esteja entre %d e %d: ", MIN_ACCEPTED_NUMBER, MAX_ACCEPTED_NUMBER);
         }
     } while(isInputInvalid);
@@ -43,10 +51,12 @@ int getUserGuess() {
 }
 
 bool verifyUserGuess(const int guessValue, const int generatedNumber) {
+    // Inicialmente, verifica se o chute está certo
     if (guessValue == generatedNumber) {
-        return true;
+        return true; // Se sim já retorna true
     }
 
+    // Se não, verifica se o chute foi acima ou abaixo do valor gerado
     char tip[10];
     if (guessValue < generatedNumber) {
         strcpy(tip, "maior");
