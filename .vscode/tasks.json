@@ -11,6 +11,8 @@
                 "${fileDirname}\\utils\\*.c",
                 "${fileDirname}\\gameplay\\*.h",
                 "${fileDirname}\\gameplay\\*.c",
+                "${fileDirname}\\saveSystem\\*.h",
+                "${fileDirname}\\saveSystem\\*.c",
                 "${file}",
                 "-o",
                 "${fileDirname}\\${fileBasenameNoExtension}.exe",

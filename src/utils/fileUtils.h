@@ -1,2 +1,0 @@
-void clearFile();
-void writeFile();

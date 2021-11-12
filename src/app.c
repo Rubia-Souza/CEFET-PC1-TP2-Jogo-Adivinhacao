@@ -9,6 +9,7 @@
 #include "utils/constants.h"
 #include "gameplay/userTurn.h"
 #include "gameplay/iaTurn.h"
+#include "saveSystem/saveSystem.h"
 
 void setUpConfigs();
 int getAmountOfTurns();
@@ -27,14 +28,17 @@ int main() {
     amountTurns = getAmountOfTurns();
 
     for (int i = 1; i <= amountTurns; i++) {
+        printf("\n\n<<<< Iniciando o turno %d >>>>", i);
         int userAttempts = 0, iaAttempts = 0;
 
+        printf("\n[JUIZ]: Iniciando vez do usuário");
         generatedNumber =  createRandomNumber(MIN_ACCEPTED_NUMBER, MAX_ACCEPTED_NUMBER);
         userAttempts = startUserTurn(generatedNumber);
         printUserScore(userAttempts);
 
         askToThinkANumber();
 
+        printf("\n[JUIZ]: Iniciando vez da IA");
         iaAttempts = startIaTurn();
         bool userIsStealing = iaAttempts == -1;
         if (userIsStealing) {
@@ -63,6 +67,7 @@ int main() {
 void setUpConfigs() {
     setlocale(LC_ALL, DEFAULT_LOCALE);
     srand(time(0));
+    createSave();
 
     return;
 }
@@ -78,7 +83,7 @@ int getAmountOfTurns() {
 
         isInputInvalid = qtdTunrs <= 0;
         if (isInputInvalid) {
-            printf("\n[JUIZ]: Por favor digite um valor válido que seja maior que 0.\n");
+            printf("\n[JUIZ]: Por favor digite um valor válido que seja maior que 0: ");
         }
     } while(isInputInvalid);
 
@@ -115,7 +120,7 @@ char evaluateResults(const int iaAttempts, const int userAttempts, const int act
         return '\000';
     }
 
-    bool playerWon = iaAttempts < userAttempts;
+    bool playerWon = userAttempts < iaAttempts;
     char winner[15];
     if (playerWon) {
         strcpy(winner, "Usuário");
@@ -156,8 +161,14 @@ void evaluateFinalResult(const int iaScore, const int userScore) {
         printf("\n[JUIZ]: %s venceu.", winner);
     }
 
-    printf("\n[JUIZ]: Placar final: \n Computador %d Usuário: %d", iaScore, userScore);
-    printf("\n[JUIZ]: Historicamente o computador já venceu <insert> rodadas e o usuário <insert> rodas.");
+    int userHistoryScore = 0, iaHistoryScore = 0;
+    loadScore(&userHistoryScore, &iaHistoryScore);
+    userHistoryScore += userScore;
+    iaHistoryScore += iaScore;
+    saveScore(userHistoryScore, iaHistoryScore);
+
+    printf("\n[JUIZ]: Placar final: \n Computador %d | Usuário: %d", iaScore, userScore);
+    printf("\n[JUIZ]: Historicamente o computador já venceu %d rodadas e o usuário %d rodas.", userHistoryScore, iaHistoryScore);
     printf("\n____________________________________________");
 
     return;

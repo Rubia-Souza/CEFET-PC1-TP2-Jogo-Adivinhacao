@@ -7,4 +7,7 @@
 #define USER 'u'
 #define IA 'c'
 
-extern const char DEFAULT_LOCALE[11];
+extern const char DEFAULT_LOCALE[15];
+
+extern const char SCORE_SAVE_PATH[25];
+extern const char SCORE_SAVE_FULL_FILE_PATH[40];

@@ -48,9 +48,9 @@ void cutRightPartArray(const int referenceArray[], const int cutNumberStart, int
     return;
 }
 
-void copyArray(const int referenceArray[], const int size, int targetArray[]) {
+void copyArray(const int referenceArray[], const int size, int outArray[]) {
     for (int i = 0; i < size; i++) {
-        targetArray[i] = referenceArray[i];
+        outArray[i] = referenceArray[i];
     }
 
     return;

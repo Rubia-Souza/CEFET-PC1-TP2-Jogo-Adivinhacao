@@ -35,7 +35,7 @@ int getUserGuess() {
 
         isInputInvalid = userGuess < 0 || userGuess > 20;
         if (isInputInvalid) {
-            printf("\n[JUIZ]: Por favor digite um valor válido, que esteja entre %d e %d", MIN_ACCEPTED_NUMBER, MAX_ACCEPTED_NUMBER);
+            printf("\n[JUIZ]: Por favor digite um valor válido, que esteja entre %d e %d: ", MIN_ACCEPTED_NUMBER, MAX_ACCEPTED_NUMBER);
         }
     } while(isInputInvalid);
 

@@ -49,7 +49,7 @@ bool validateGuess(const int guessNumber) {
 
         isInputValid = validation == 's' || validation == 'n';
         if (!isInputValid) {
-            printf("\n[JUIZ]: Por favor digite [s] para sim ou [n] para não");
+            printf("\n[JUIZ]: Por favor digite [s] para sim ou [n] para não: ");
         }
     } while (!isInputValid);
 
@@ -68,7 +68,7 @@ int guessOtherValueBasedOnLast(const int lastValue, int availableNumbers[POSSIBL
 
         isInputValid = userAwnser == 's' || userAwnser == 'n';
         if (!isInputValid) {
-            printf("\n[JUIZ]: Por favor digite [s] para sim ou [n] para não");
+            printf("\n[JUIZ]: Por favor digite [s] para sim ou [n] para não: ");
         }
     } while (!isInputValid);
 
