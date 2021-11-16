@@ -23,18 +23,18 @@ bool validateGuess(const int guessNumber);
  */
 bool checkWithUserIfNumberIsHigher(const int lastValue);
 
-/*
+/* MODO: 1
+ * Gera um novo valor sempre como o intermediário entre o maior e menor valor definido anteriormente
+ */
+int guessOtherValueBasedOnBinaryDivision(const int lastValue, int *highestValue, int *lowestValue);
+
+/* MODO: 2
  * Gera um novo valor com base na troca da definição de qual é o maior e o menor número possível
  * definidos de acordo com as tentativas anteriores
  */
 int guessOtherValueBasedOnExtremes(const int lastValue, int *highestValue, int *lowestValue);
 
-/*
- * Gera um novo valor sempre como o intermediário entre o maior e menor valor definido anteriormente
- */
-int guessOtherValueBasedOnBinaryDivision(const int lastValue, int *highestValue, int *lowestValue);
-
-/*
+/* MODO: 3
  * Gera um novo valor com base em um array que possui todos os números válidos ainda não chutados
  * que sobram com base em chutes anteriores
  */
