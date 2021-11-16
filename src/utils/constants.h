@@ -7,9 +7,14 @@
 #define POSSIBLE_NUMBERS_ARRAY_SIZE 22
 #define NULL_NUMBER 99
 
-// Define variáveis para tornar mais legível a identificação do usuário e do pc
+// Define constantes para tornar mais legível a identificação do usuário e do pc
 #define USER 'u'
 #define IA 'c'
+
+// Define constantes para o modo de funcionamento da ia
+#define EXTREMES_MODE 'e'
+#define BINARY_MODE 'b'
+#define POSSIBILITYS_MODE 'p'
 
 // Define a linguagem padrão que será usada no setLocale()
 extern const char DEFAULT_LOCALE[15];

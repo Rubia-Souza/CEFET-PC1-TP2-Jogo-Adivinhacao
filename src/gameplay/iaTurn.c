@@ -1,10 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <math.h>
 
 #include "../utils/constants.h"
 #include "../utils/mathUtils.h"
 #include "../utils/arrayUtils.h"
+
+int startExtremesMode();
+
+int startBinaryDivisionMode();
+
+int startPossiblitysMode();
 
 /*
  * Pergunta ao jogador se o chute do computador esta correto
@@ -12,11 +19,90 @@
 bool validateGuess(const int guessNumber);
 
 /*
- * Gera um novo valor com base no valor gerado anteriormente
+ * Verifica com o usuário se o número pensado é maior que o gerado pela ia
  */
-int guessOtherValueBasedOnLast(const int lastValue, int availableNumbers[POSSIBLE_NUMBERS_ARRAY_SIZE]);
+bool checkWithUserIfNumberIsHigher(const int lastValue);
 
-int startIaTurn() {
+/*
+ * Gera um novo valor com base na troca da definição de qual é o maior e o menor número possível
+ * definidos de acordo com as tentativas anteriores
+ */
+int guessOtherValueBasedOnExtremes(const int lastValue, int *highestValue, int *lowestValue);
+
+/*
+ * Gera um novo valor sempre como o intermediário entre o maior e menor valor definido anteriormente
+ */
+int guessOtherValueBasedOnBinaryDivision(const int lastValue, int *highestValue, int *lowestValue);
+
+/*
+ * Gera um novo valor com base em um array que possui todos os números válidos ainda não chutados
+ * que sobram com base em chutes anteriores
+ */
+int guessOtherValueBasedOnPossibleValues(const int lastValue, int availableNumbers[POSSIBLE_NUMBERS_ARRAY_SIZE]);
+
+int startIaTurn(const char IAmode) {
+    switch (IAmode) {
+        case EXTREMES_MODE: return startExtremesMode();
+        
+        case BINARY_MODE: return startBinaryDivisionMode();
+
+        case POSSIBILITYS_MODE: return startPossiblitysMode();
+    }
+
+    return -1;
+}
+
+int startExtremesMode() {
+    bool userIsStealing = false, isGuessRight = false;
+    int attemps = 0, guessNumber = 0;
+    int highestValue = MAX_ACCEPTED_NUMBER, lowestValue = MIN_ACCEPTED_NUMBER;
+
+    guessNumber = createRandomNumber(lowestValue, highestValue);
+
+    do {
+        userIsStealing = guessNumber == -1;
+        if (userIsStealing) {
+            printf("\n[IA]: Que?! Isso não é possível. :o\n[IA]: Você tá robando ¬_¬");
+            return -1;
+        }
+
+        isGuessRight = validateGuess(guessNumber);
+        attemps++;
+
+        if (!isGuessRight) {
+            guessNumber = guessOtherValueBasedOnExtremes(guessNumber, &highestValue, &lowestValue);
+        }
+    } while(!isGuessRight);
+
+    return attemps;
+}
+
+int startBinaryDivisionMode() {
+    bool userIsStealing = false, isGuessRight = false;
+    int attemps = 0, guessNumber = 0;
+    int highestValue = MAX_ACCEPTED_NUMBER, lowestValue = MIN_ACCEPTED_NUMBER;
+
+    guessNumber = createRandomNumber(lowestValue, highestValue);
+
+    do {
+        userIsStealing = guessNumber == -1;
+        if (userIsStealing) {
+            printf("\n[IA]: Que?! Isso não é possível. :o\n[IA]: Você tá robando ¬_¬");
+            return -1;
+        }
+
+        isGuessRight = validateGuess(guessNumber);
+        attemps++;
+
+        if (!isGuessRight) {
+            guessNumber = guessOtherValueBasedOnBinaryDivision(guessNumber, &highestValue, &lowestValue);
+        }
+    } while(!isGuessRight);
+
+    return attemps;
+}
+
+int startPossiblitysMode() {
     bool isGuessRight = false, userIsStealing = false;
     int attempts = 0;
 
@@ -42,7 +128,7 @@ int startIaTurn() {
 
         // Enquanto o chute não estiver correto, o pc gera um novo número aleatório com base nos números possíves restantes
         if (!isGuessRight) {
-            guessNumber = guessOtherValueBasedOnLast(guessNumber, availableNumbers);
+            guessNumber = guessOtherValueBasedOnPossibleValues(guessNumber, availableNumbers);
         }
     } while(!isGuessRight);
 
@@ -68,7 +154,7 @@ bool validateGuess(const int guessNumber) {
     return validation == 's';
 }
 
-int guessOtherValueBasedOnLast(const int lastValue, int availableNumbers[POSSIBLE_NUMBERS_ARRAY_SIZE]) {
+bool checkWithUserIfNumberIsHigher(const int lastValue) {
     printf("\n[IA]: :S Hummm... o número é maior do que %d (s/n)? ", lastValue);
 
     bool isInputValid = false;
@@ -85,10 +171,48 @@ int guessOtherValueBasedOnLast(const int lastValue, int availableNumbers[POSSIBL
         }
     } while (!isInputValid);
 
+    return userAwnser == 's';
+}
+
+int guessOtherValueBasedOnExtremes(const int lastValue, int *highestValue, int *lowestValue) {
+    bool isValueBigger = checkWithUserIfNumberIsHigher(lastValue);
+
+    if (*highestValue == *lowestValue) {
+        return -1;
+    }
+
+    if (isValueBigger) { // Verifica se o número pensado pelo jogador é maior que o chute anterior.
+        *lowestValue = lastValue + 1;
+    }
+    else { // Verifica se o número pensado pelo jogador é menor que o chute anterior.
+        *highestValue = lastValue - 1;
+    }
+    
+    return createRandomNumber(*lowestValue, *highestValue);
+}
+
+int guessOtherValueBasedOnBinaryDivision(const int lastValue, int *highestValue, int *lowestValue) {
+    bool isValueBigger = checkWithUserIfNumberIsHigher(lastValue);
+
+    if (*highestValue == *lowestValue) {
+        return -1;
+    }
+
+    if (isValueBigger) { // Verifica se o número pensado pelo jogador é maior que o chute anterior.
+        *lowestValue = lastValue + 1;
+    }
+    else { // Verifica se o número pensado pelo jogador é menor que o chute anterior.
+        *highestValue = lastValue - 1;
+    }
+
+    return ceil((*highestValue + *lowestValue) / 2);
+}
+
+int guessOtherValueBasedOnPossibleValues(const int lastValue, int availableNumbers[POSSIBLE_NUMBERS_ARRAY_SIZE]) {
     int filteredNumbers[POSSIBLE_NUMBERS_ARRAY_SIZE];
     int filteredNumbersSize = POSSIBLE_NUMBERS_ARRAY_SIZE;
 
-    bool isValueBigger = userAwnser == 's';
+    bool isValueBigger = checkWithUserIfNumberIsHigher(lastValue);
     if (isValueBigger) { // Verifica se o número pensado pelo jogador é maior que o chute anterior.
         cutLeftPartArray(availableNumbers, lastValue, &filteredNumbersSize, filteredNumbers); // Se sim, ele remove o chute e todos os números menores que ele (a esquerda do array)
     }

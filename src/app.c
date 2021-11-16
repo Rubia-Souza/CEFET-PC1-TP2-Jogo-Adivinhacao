@@ -28,6 +28,11 @@ void setUpConfigs();
 int getAmountOfTurns();
 
 /*
+ * Pergunta ao usuário qual modo de jogo ele deseja que a IA siga
+ */
+char getGameMode();
+
+/*
  * Pede ao usuário para que pense em um número, preparando para iniciar
  * o turno do computador
  */
@@ -60,6 +65,7 @@ int main() {
     int generatedNumber = 0, amountTurns = 0;
     int userScore = 0, iaScore = 0;
     amountTurns = getAmountOfTurns();
+    char gameMode = getGameMode();
 
     for (int i = 1; i <= amountTurns; i++) {
         printf("\n\n<<<< Iniciando o turno %d >>>>", i);
@@ -76,7 +82,7 @@ int main() {
 
         // Inicia o turno em que o computador deverá adivinhar o número
         printf("\n[JUIZ]: Iniciando vez da IA");
-        iaAttempts = startIaTurn();
+        iaAttempts = startIaTurn(gameMode);
 
         // Verifica se o usuário foi inconsistente com as respostas, levando a nenhum resultado possível
         bool userIsStealing = iaAttempts == -1;
@@ -128,6 +134,34 @@ int getAmountOfTurns() {
     } while(isInputInvalid);
 
     return qtdTunrs;
+}
+
+char getGameMode() {
+    int gameMode;
+    bool isInputValid = false;
+
+    printf("\n[1]: Modo IA binária: Seleciona o número intermediário entre o menor e maior já informado");
+    printf("\n[2]: Modo IA Extrema: Seleciona um número aleatório entre o menor e maior já informado");
+    printf("\n[3]: Modo IA Possibilidades: Seleciona um número aleatório entre um array de possibilidades");
+    printf("\n[JUIZ]: Escolha um modo dos modos de jogo: ");
+
+    do {
+        fflush(stdin); // Limpa buffer de entrada para evitar alguma entrada não necessária
+        scanf("%d", &gameMode);
+
+        isInputValid = gameMode >= 1 && gameMode <= 2;
+        if (!isInputValid) { // Valida se o modo de jogo escolhido é válido
+            printf("\n[JUIZ]: Digite uma das três opções: 1, 2 ou 3: ");
+        }
+    } while (!isInputValid);
+
+    switch (gameMode) {
+        case 1: return BINARY_MODE;
+        case 2: return EXTREMES_MODE;
+        case 3: return POSSIBILITYS_MODE;
+    }
+
+    return POSSIBILITYS_MODE;
 }
 
 void askToThinkANumber() {
