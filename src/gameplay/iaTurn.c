@@ -41,6 +41,7 @@ int guessOtherValueBasedOnBinaryDivision(const int lastValue, int *highestValue,
 int guessOtherValueBasedOnPossibleValues(const int lastValue, int availableNumbers[POSSIBLE_NUMBERS_ARRAY_SIZE]);
 
 int startIaTurn(const char IAmode) {
+    // Seleciona o modo de chute da IA com base no modo selecionado no início do programa
     switch (IAmode) {
         case EXTREMES_MODE: return startExtremesMode();
         
@@ -177,35 +178,37 @@ bool checkWithUserIfNumberIsHigher(const int lastValue) {
 int guessOtherValueBasedOnExtremes(const int lastValue, int *highestValue, int *lowestValue) {
     bool isValueBigger = checkWithUserIfNumberIsHigher(lastValue);
 
+    // Verifica se os valores máximo e mínimo chegaram ao mesmo número. Se sim, o jogador deu respostas inconsistentes
     if (*highestValue == *lowestValue) {
         return -1;
     }
 
     if (isValueBigger) { // Verifica se o número pensado pelo jogador é maior que o chute anterior.
-        *lowestValue = lastValue + 1;
+        *lowestValue = lastValue + 1; // Se o valor anteriror é maior, então o mínimo passa a ser o número acima dele
     }
     else { // Verifica se o número pensado pelo jogador é menor que o chute anterior.
-        *highestValue = lastValue - 1;
+        *highestValue = lastValue - 1; // Se o valor anterior é menor, então o máximo passa a ser o número abaixo dele
     }
     
-    return createRandomNumber(*lowestValue, *highestValue);
+    return createRandomNumber(*lowestValue, *highestValue); // Então, ele gera um número aleatório qualquer entre os dois
 }
 
 int guessOtherValueBasedOnBinaryDivision(const int lastValue, int *highestValue, int *lowestValue) {
     bool isValueBigger = checkWithUserIfNumberIsHigher(lastValue);
 
+    // Verifica se os valores máximo e mínimo chegaram ao mesmo número. Se sim, o jogador deu respostas inconsistentes
     if (*highestValue == *lowestValue) {
         return -1;
     }
 
     if (isValueBigger) { // Verifica se o número pensado pelo jogador é maior que o chute anterior.
-        *lowestValue = lastValue + 1;
+        *lowestValue = lastValue + 1; // Se o valor anteriror é maior, então o mínimo passa a ser o número acima dele
     }
     else { // Verifica se o número pensado pelo jogador é menor que o chute anterior.
-        *highestValue = lastValue - 1;
+        *highestValue = lastValue - 1; // Se o valor anterior é menor, então o máximo passa a ser o número abaixo dele
     }
 
-    return ceil((*highestValue + *lowestValue) / 2);
+    return ceil((*highestValue + *lowestValue) / 2); // Então, ele pega a metade entre o máximo e o mínimo arredondado para cima
 }
 
 int guessOtherValueBasedOnPossibleValues(const int lastValue, int availableNumbers[POSSIBLE_NUMBERS_ARRAY_SIZE]) {

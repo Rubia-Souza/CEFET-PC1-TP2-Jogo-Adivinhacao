@@ -155,6 +155,7 @@ char getGameMode() {
         }
     } while (!isInputValid);
 
+    // Retorna a constante relacionado ao modo selecionado
     switch (gameMode) {
         case 1: return BINARY_MODE;
         case 2: return EXTREMES_MODE;
