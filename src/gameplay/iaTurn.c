@@ -137,7 +137,7 @@ int startPossiblitysMode() {
 }
 
 bool validateGuess(const int guessNumber) {
-    printf("\n[IA]: >:/ Você... penso no número... :D %d! (s/n)? ", guessNumber);
+    printf("\n[IA]: >:/ Você... pensou no número... :D %d! (s/n)? ", guessNumber);
 
     bool isInputValid = false;
     char validation;
