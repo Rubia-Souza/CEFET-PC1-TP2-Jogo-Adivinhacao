@@ -149,7 +149,7 @@ char getGameMode() {
         fflush(stdin); // Limpa buffer de entrada para evitar alguma entrada não necessária
         scanf("%d", &gameMode);
 
-        isInputValid = gameMode >= 1 && gameMode <= 2;
+        isInputValid = gameMode >= 1 && gameMode <= 3;
         if (!isInputValid) { // Valida se o modo de jogo escolhido é válido
             printf("\n[JUIZ]: Digite uma das três opções: 1, 2 ou 3: ");
         }
